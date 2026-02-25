@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "btg-fondos-manager": {
+    "fondos-manager": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "btg-fondos-manager:build:production"
+              "buildTarget": "fondos-manager:build:production"
             },
             "development": {
-              "buildTarget": "btg-fondos-manager:build:development"
+              "buildTarget": "fondos-manager:build:development"
             }
           },
           "defaultConfiguration": "development"

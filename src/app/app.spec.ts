@@ -18,6 +18,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, btg-fondos-manager');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, fondos-manager');
   });
 });

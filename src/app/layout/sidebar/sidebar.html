@@ -1,0 +1,144 @@
+<!-- Backdrop overlay (mobile only) -->
+@if (isOpen()) {
+  <div
+    class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300"
+    (click)="closeSidebar.emit()"
+  ></div>
+}
+
+<!-- Sidebar -->
+<aside
+  [class]="
+    'fixed left-0 top-0 h-screen bg-linear-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col shadow-2xl z-50 transition-all duration-300 ' +
+    (isOpen() ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 ') +
+    (isCollapsed() && !isOpen() ? 'lg:w-20' : 'lg:w-64')
+  "
+>
+  <!-- Logo / Brand -->
+  <div
+    class="relative flex items-center gap-3 px-6 py-6 border-b border-slate-700/50"
+    [class.justify-center]="isCollapsed() && !isOpen()"
+  >
+    <div
+      class="w-10 h-10 min-w-[40px] rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/25"
+    >
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    </div>
+    @if (!isCollapsed() || isOpen()) {
+      <div class="transition-opacity duration-300">
+        <h1 class="text-lg font-bold tracking-tight">Fondos Manager</h1>
+      </div>
+    }
+
+    <!-- Collapse Toggle (Desktop only) -->
+    <button
+      (click)="toggleCollapse.emit()"
+      class="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-800 border border-slate-700 text-slate-400 items-center justify-center hover:text-white hover:bg-slate-700 transition-all shadow-md z-10"
+    >
+      <svg
+        [class]="'w-4 h-4 transition-transform duration-300 ' + (isCollapsed() ? 'rotate-180' : '')"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+    @if (!isCollapsed() || isOpen()) {
+      <p class="px-3 mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+        Principal
+      </p>
+    }
+
+    <a
+      routerLink="/"
+      routerLinkActive="bg-blue-600/20 text-blue-400 border-blue-500/30"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="onNavClick()"
+      class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:text-white transition-all duration-200 border border-transparent cursor-pointer group"
+      [class.justify-center]="isCollapsed() && !isOpen()"
+      [title]="isCollapsed() ? 'Dashboard' : ''"
+    >
+      <svg
+        class="w-5 h-5 min-w-[20px] group-hover:scale-110 transition-transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
+      </svg>
+      @if (!isCollapsed() || isOpen()) {
+        <span class="truncate transition-opacity duration-300">Dashboard</span>
+      }
+    </a>
+
+    <a
+      routerLink="/funds"
+      routerLinkActive="bg-blue-600/20 text-blue-400 border-blue-500/30"
+      (click)="onNavClick()"
+      class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:text-white transition-all duration-200 border border-transparent cursor-pointer group"
+      [class.justify-center]="isCollapsed() && !isOpen()"
+      [title]="isCollapsed() ? 'Fondos' : ''"
+    >
+      <svg
+        class="w-5 h-5 min-w-[20px] group-hover:scale-110 transition-transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+        />
+      </svg>
+      @if (!isCollapsed() || isOpen()) {
+        <span class="truncate transition-opacity duration-300">Fondos</span>
+      }
+    </a>
+  </nav>
+
+  <!-- User section -->
+  <div class="px-4 py-4 border-t border-slate-700/50">
+    <div
+      class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-colors cursor-pointer"
+      [class.justify-center]="isCollapsed() && !isOpen()"
+    >
+      <div
+        class="w-9 h-9 min-w-[36px] rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-sm font-bold shadow-lg shadow-emerald-500/20"
+      >
+        {{ dashboardService.userInfo()?.nombre?.substring(0, 2)?.toUpperCase() }}
+      </div>
+      @if (!isCollapsed() || isOpen()) {
+        <div class="flex-1 min-w-0 transition-opacity duration-300">
+          <p class="text-sm font-medium truncate">{{ dashboardService.userInfo()?.nombre }}</p>
+        </div>
+        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+      }
+    </div>
+  </div>
+</aside>

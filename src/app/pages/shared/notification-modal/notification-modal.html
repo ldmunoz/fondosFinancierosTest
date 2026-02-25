@@ -1,0 +1,103 @@
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" (click)="closeModal()">
+  <div
+    class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md transform transition-all scale-100"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex justify-end">
+      <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="text-center mt-4">
+      <div
+        [class]="
+          'w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 ' +
+          (status === 'success' ? 'bg-emerald-100' : 'bg-red-100')
+        "
+      >
+        <svg
+          [class]="'w-10 h-10 ' + (status === 'success' ? 'text-emerald-600' : 'text-red-600')"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          @if (status === 'success') {
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
+          } @else {
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          }
+        </svg>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-800 mb-2">
+        {{ status === 'success' ? '¡Suscripción exitosa!' : 'No se pudo procesar' }}
+      </h3>
+      <p class="text-slate-500 mb-6">
+        {{
+          message ||
+            (status === 'success'
+              ? 'Has sido suscrito exitosamente al fondo ' + fund?.nombre + '.'
+              : 'Ha ocurrido un error al procesar tu solicitud.')
+        }}
+      </p>
+
+      @if (status === 'success' && fund) {
+        <div class="bg-slate-50 rounded-lg p-4 mb-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Monto invertido</p>
+              <p class="text-2xl font-bold text-slate-800 mt-1">
+                {{ fund.monto_minimo | currency }}
+              </p>
+            </div>
+            <div class="bg-emerald-100 p-3 rounded-lg">
+              <svg
+                class="w-6 h-6 text-emerald-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      }
+
+      <button
+        (click)="closeModal()"
+        [class]="
+          'w-full font-medium py-2 px-4 rounded-lg transition-colors text-white ' +
+          (status === 'success'
+            ? 'bg-emerald-600 hover:bg-emerald-700'
+            : 'bg-slate-800 hover:bg-slate-900')
+        "
+      >
+        {{ status === 'success' ? 'Entendido' : 'Cerrar' }}
+      </button>
+    </div>
+  </div>
+</div>
