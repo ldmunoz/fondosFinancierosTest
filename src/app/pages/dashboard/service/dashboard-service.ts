@@ -16,4 +16,13 @@ export class DashboardService {
   getFundsClient(): number {
     return this.userInfo()?.saldo ?? 0;
   }
+
+  discountFunds(amount: number): void {
+    this.userInfo.update((user) => {
+      if (user) {
+        user.saldo -= amount;
+      }
+      return user;
+    });
+  }
 }

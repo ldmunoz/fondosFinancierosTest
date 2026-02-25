@@ -33,6 +33,7 @@
   <app-table-funds
     [funds]="fundsSubscribed()"
     [title]="'Fondos suscritos'"
+    [isUnsubscribe]="true"
     (subscribe)="onUnsubscribe($event)"
   ></app-table-funds>
 </div>

@@ -3,8 +3,8 @@
 >
   <div class="col-span-1 px-6 py-5 border-b border-slate-100 flex items-center justify-between">
     <div>
-      <h3 class="text-lg font-semibold text-slate-800">{{ title }}</h3>
-      <p class="text-sm text-slate-500 mt-0.5">{{ funds.length }} fondos</p>
+      <h3 class="text-lg font-semibold text-slate-800">{{ title() }}</h3>
+      <p class="text-sm text-slate-500 mt-0.5">{{ funds().length }} fondos</p>
     </div>
   </div>
 
@@ -87,12 +87,21 @@
               }
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
-              <button
-                (click)="onSubscribe(fund.id)"
-                class="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
-              >
-                Suscribirse
-              </button>
+              @if (!isUnsubscribe()) {
+                <button
+                  (click)="onSubscribe(fund.id)"
+                  class="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
+                >
+                  Suscribirse
+                </button>
+              } @else {
+                <button
+                  (click)="onSubscribe(fund.id)"
+                  class="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 cursor-pointer"
+                >
+                  Desuscribirse
+                </button>
+              }
             </td>
           </tr>
         }
@@ -106,13 +115,13 @@
   >
     <p class="text-sm text-slate-500">
       Mostrando
-      <span class="font-medium text-slate-700">{{ (currentPage() - 1) * pageSize + 1 }}</span>
+      <span class="font-medium text-slate-700">{{ (currentPage() - 1) * pageSize() + 1 }}</span>
       a
       <span class="font-medium text-slate-700">{{
-        currentPage() * pageSize > funds.length ? funds.length : currentPage() * pageSize
+        currentPage() * pageSize() > funds().length ? funds().length : currentPage() * pageSize()
       }}</span>
       de
-      <span class="font-medium text-slate-700">{{ funds.length }}</span>
+      <span class="font-medium text-slate-700">{{ funds().length }}</span>
       fondos
     </p>
 

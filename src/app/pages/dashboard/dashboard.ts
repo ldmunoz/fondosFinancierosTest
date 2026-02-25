@@ -37,9 +37,10 @@ export class Dashboard implements OnInit {
       return;
     }
 
+    this.dashboardService.discountFunds(this.selectedFund.monto_minimo);
     this.fundService.subscribeToFund(id);
     this.modalStatus.set('success');
-    this.modalMessage.set('');
+    this.modalMessage.set(`Te has suscrito exitosamente al fondo ${this.selectedFund.nombre}`);
     this.showModal.set(true);
   }
 

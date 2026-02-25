@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, computed, EventEmitter, input, Output, signal } from '@angular/core';
 import { Fund } from '../../dashboard/models/fund';
 
 @Component({
@@ -10,20 +10,21 @@ import { Fund } from '../../dashboard/models/fund';
   styleUrl: './table-funds.css',
 })
 export class TableFunds {
-  @Input({ required: true }) funds: Fund[] = [];
-  @Input() pageSize = 5;
-  @Input() title = 'Fondos disponibles';
+  funds = input.required<Fund[]>();
+  pageSize = input(5);
+  title = input('Fondos disponibles');
+  isUnsubscribe = input(false);
 
   @Output() subscribe = new EventEmitter<number>();
 
   currentPage = signal(1);
 
   readonly paginatedFunds = computed(() => {
-    const start = (this.currentPage() - 1) * this.pageSize;
-    return this.funds.slice(start, start + this.pageSize);
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return this.funds().slice(start, start + this.pageSize());
   });
 
-  readonly totalPages = computed(() => Math.ceil(this.funds.length / this.pageSize));
+  readonly totalPages = computed(() => Math.ceil(this.funds().length / this.pageSize()));
 
   readonly pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 
