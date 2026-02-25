@@ -1,11 +1,13 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Fund } from '../../dashboard/models/fund';
 import { CFund } from '../../shared/constant/CFund';
+import { HistoryService } from '../../history/service/history-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FundService {
+  private historyService: HistoryService = inject(HistoryService);
   // Source of truth as a private signal
   private fundsSignal = signal<Fund[]>(CFund);
 
@@ -26,6 +28,13 @@ export class FundService {
     this.fundsSignal.update((funds) =>
       funds.map((f) => (f.id === id ? { ...f, estaSuscrito: true } : f)),
     );
+    this.historyService.setHistory({
+      id: this.historyService.getHistories().length + 1,
+      date: new Date(),
+      type: 'Suscripción',
+      description: `Suscripción al fondo ${this.getFundById(id).nombre}`,
+      amount: this.getFundById(id).monto_minimo,
+    });
   }
 
   getPaginatedNotAvailable(page: number, pageSize: number): Fund[] {
@@ -34,10 +43,17 @@ export class FundService {
   }
 
   unsubscribeFromFund(id: number) {
-    console.log(id);
     this.fundsSignal.update((funds) =>
       funds.map((f) => (f.id === id ? { ...f, estaSuscrito: false } : f)),
     );
+
+    this.historyService.setHistory({
+      id: this.historyService.getHistories().length + 1,
+      date: new Date(),
+      type: 'Cancelación',
+      description: `Cancelación de suscripción al fondo ${this.getFundById(id).nombre}`,
+      amount: this.getFundById(id).monto_minimo,
+    });
   }
 
   getFundById(id: number): Fund {
