@@ -14,7 +14,14 @@ export class NotificationModal {
   @Input() message: string = '';
   @Output() close = new EventEmitter<void>();
 
+  emailEnabled: boolean = true;
+  mobileEnabled: boolean = false;
+
   closeModal() {
+    if (!this.emailEnabled && !this.mobileEnabled) {
+      return;
+    }
+
     this.close.emit();
   }
 }
