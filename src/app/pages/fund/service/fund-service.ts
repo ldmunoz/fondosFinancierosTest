@@ -24,16 +24,16 @@ export class FundService {
   /**
    * Updates a fund's subscription status reactively
    */
-  subscribeToFund(id: number) {
+  subscribeToFund(id: number, amount: number) {
     this.fundsSignal.update((funds) =>
-      funds.map((f) => (f.id === id ? { ...f, estaSuscrito: true } : f)),
+      funds.map((f) => (f.id === id ? { ...f, estaSuscrito: true, monto_suscrito: amount } : f)),
     );
     this.historyService.setHistory({
       id: this.historyService.getHistories().length + 1,
       date: new Date(),
       type: 'Suscripción',
       description: `Suscripción al fondo ${this.getFundById(id).nombre}`,
-      amount: this.getFundById(id).monto_minimo,
+      amount: amount,
     });
   }
 

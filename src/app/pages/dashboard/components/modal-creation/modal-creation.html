@@ -1,0 +1,209 @@
+<div
+  class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+  (click)="closeModal()"
+>
+  <div
+    class="bg-white rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto transform transition-all animate-in fade-in zoom-in duration-300 custom-scrollbar"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Close Button -->
+    <div class="flex justify-end mb-1">
+      <button
+        (click)="closeModal()"
+        class="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-all"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Available Balance Card -->
+    <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 mb-6 flex items-center gap-4">
+      <div class="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-200">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+          />
+        </svg>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+          Saldo disponible
+        </p>
+        <p class="text-xl md:text-2xl font-extrabold text-blue-700 font-mono">
+          {{ this.dashboardService.fundsClient() | currency: 'COP' : 'symbol' : '1.0-0' }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <form (ngSubmit)="confirmInvestment()" [formGroup]="investmentForm" class="space-y-5">
+      <!-- Select Investment Fund -->
+      <div>
+        <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
+          Fondo en el que deseas invertir
+        </label>
+        <div class="relative group">
+          <p class="mt-1.5 text-[11px] text-slate-400">
+            {{ fund.nombre }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Investment Amount -->
+      <div>
+        <div class="flex justify-between items-end mb-2">
+          <label class="text-sm font-bold text-slate-700"
+            >Monto a invertir <small class="text-red-500">*</small></label
+          >
+          <button
+            (click)="useMaxBalance()"
+            class="text-[10px] font-bold text-blue-600 hover:text-blue-700 uppercase tracking-tight transition-colors cursor-pointer"
+          >
+            usar maximo disponible
+          </button>
+        </div>
+        <div class="relative group">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+          <input
+            type="text"
+            formControlName="amount"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            maxlength="25"
+            min="4"
+            class="w-full bg-white border rounded-xl pl-10 pr-4 py-3 text-lg font-bold text-slate-700 focus:outline-none transition-all"
+            [ngClass]="
+              isInsufficientBalance()
+                ? 'border-red-400 bg-red-50/30'
+                : 'border-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+            "
+          />
+        </div>
+        @if (amountControl.touched && amountControl.value == '') {
+          <div class="mt-2 bg-red-50 border border-red-100 rounded-xl p-2 flex gap-3">
+            <p class="text-xs font-bold text-red-500">El monto es requerido</p>
+          </div>
+        }
+        @if (amountControl.touched && amountControl.value < 1000) {
+          <div class="mt-2 bg-red-50 border border-red-100 rounded-xl p-2 flex gap-3">
+            <p class="text-xs font-bold text-red-500">El monto minimo a invertir es de 1000</p>
+          </div>
+        }
+        @if (isInsufficientBalance()) {
+          <div
+            class="mt-2 bg-red-50 border border-red-100 rounded-xl p-3 flex gap-3 animate-in slide-in-from-top-2 duration-300"
+          >
+            <svg
+              class="w-5 h-5 text-red-400 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <div>
+              <p class="text-xs font-bold text-red-500">El saldo es insuficiente</p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div>
+        <label class="text-sm font-bold text-slate-700 mb-2 block">Te notificamos por: </label>
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            (click)="setNotificationPreference('email')"
+            type="button"
+            class="flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all group"
+            [ngClass]="
+              investmentForm.get('notificationPreference')?.value === 'email'
+                ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-sm'
+                : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'
+            "
+          >
+            <svg
+              class="w-5 h-5 shrink-0"
+              [ngClass]="
+                investmentForm.get('notificationPreference')?.value === 'email'
+                  ? 'text-blue-500'
+                  : 'text-slate-300 group-hover:text-slate-400'
+              "
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+            <span class="text-sm font-bold">Email</span>
+          </button>
+
+          <button
+            (click)="setNotificationPreference('sms')"
+            type="button"
+            class="flex items-center justify-center gap-2 p-3 rounded-xl border-2 transition-all group"
+            [ngClass]="
+              investmentForm.get('notificationPreference')?.value === 'sms'
+                ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-sm'
+                : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'
+            "
+          >
+            <svg
+              class="w-5 h-5 shrink-0"
+              [ngClass]="
+                investmentForm.get('notificationPreference')?.value === 'sms'
+                  ? 'text-blue-500'
+                  : 'text-slate-300 group-hover:text-slate-400'
+              "
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2-2v14a2 2 0 002 2z"
+              />
+            </svg>
+            <span class="text-sm font-bold">SMS</span>
+          </button>
+        </div>
+        @if (notificationPreferenceControl.touched && notificationPreferenceControl.value == '') {
+          <div class="mt-2 bg-red-50 border border-red-100 rounded-xl p-2 flex gap-3">
+            <p class="text-xs font-bold text-red-500">
+              La preferencia de notificación es requerida
+            </p>
+          </div>
+        }
+      </div>
+
+      <!-- Info Footer & Action Button Stack -->
+      <div class="space-y-4 pt-1">
+        <button
+          class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
+        >
+          Confirm Investment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

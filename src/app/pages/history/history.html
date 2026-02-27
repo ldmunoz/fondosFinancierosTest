@@ -20,7 +20,7 @@
               <td class="px-6 py-4 text-slate-700">{{ history.date | date: 'dd/MM/yyyy' }}</td>
               <td class="px-6 py-4 text-slate-700">{{ history.type }}</td>
               <td class="px-6 py-4 text-slate-700">{{ history.description }}</td>
-              <td class="px-6 py-4 text-slate-700">{{ history.amount }}</td>
+              <td class="px-6 py-4 text-slate-700">{{ history.amount | currency }}</td>
             </tr>
           }
         </tbody>

@@ -10,7 +10,7 @@
         <div>
           <p class="text-sm font-medium text-slate-500">Fondos Disponibles</p>
           <p class="text-2xl font-bold text-slate-800 mt-1">
-            {{ dashboardService.getFundsClient() }}
+            {{ dashboardService.fundsClient() | currency: 'COP' : 'symbol' : '1.0-0' }}
           </p>
         </div>
         <div class="bg-emerald-100 p-3 rounded-lg">
@@ -40,11 +40,20 @@
   ></app-table-funds>
 </div>
 
-@if (showModal()) {
+@if (showModalNotification()) {
   <app-notification-modal
     [fund]="selectedFund"
     [status]="modalStatus()"
+    [amount]="amountToInvest"
     [message]="modalMessage()"
     (close)="closeModal()"
   ></app-notification-modal>
+}
+
+@if (showModalCreation()) {
+  <app-modal-creation
+    [fund]="selectedFund"
+    (close)="closeModalCreation()"
+    (invest)="onInvestFromModal($event)"
+  ></app-modal-creation>
 }

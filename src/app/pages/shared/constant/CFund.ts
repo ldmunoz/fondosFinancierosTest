@@ -7,6 +7,7 @@ export const CFund: Fund[] = [
     monto_minimo: 75000,
     categoria: 'FPV',
     estaSuscrito: true,
+    monto_suscrito: 75000,
   },
   {
     id: 2,

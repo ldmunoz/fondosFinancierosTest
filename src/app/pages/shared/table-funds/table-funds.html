@@ -28,11 +28,19 @@
           >
             Categoría
           </th>
-          <th
-            class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap"
-          >
-            Monto Mínimo
-          </th>
+          @if (isUnsubscribe()) {
+            <th
+              class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap"
+            >
+              Monto Suscrito
+            </th>
+          } @else {
+            <th
+              class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap"
+            >
+              Monto Mínimo
+            </th>
+          }
           <th
             class="px-6 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap"
           >
@@ -67,7 +75,11 @@
               </span>
             </td>
             <td class="px-6 py-4 text-right text-sm font-medium text-slate-800 whitespace-nowrap">
-              {{ formatCurrency(fund.monto_minimo) }}
+              @if (isUnsubscribe()) {
+                {{ formatCurrency(fund.monto_suscrito ?? 0) }}
+              } @else {
+                {{ formatCurrency(fund.monto_minimo) }}
+              }
             </td>
             <td class="px-6 py-4 text-center whitespace-nowrap">
               @if (fund.estaSuscrito) {

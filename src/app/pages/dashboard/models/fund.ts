@@ -4,4 +4,5 @@ export interface Fund {
   monto_minimo: number;
   categoria: string;
   estaSuscrito: boolean;
+  monto_suscrito?: number;
 }

@@ -11,6 +11,7 @@ import { Fund } from '../../dashboard/models/fund';
 export class NotificationModal {
   @Input() fund!: Fund | undefined;
   @Input() status: 'success' | 'error' = 'success';
+  @Input() amount: number = 0;
   @Input() message: string = '';
   @Output() close = new EventEmitter<void>();
 

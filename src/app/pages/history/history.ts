@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { HistoryService } from './service/history-service';
 import { IHistory } from './models/history';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-history',
-  imports: [DatePipe],
+  imports: [DatePipe, CurrencyPipe],
   templateUrl: './history.html',
   styleUrl: './history.css',
 })
