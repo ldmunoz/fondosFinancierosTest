@@ -14,11 +14,25 @@ export class DashboardService {
   }
 
   discountFunds(amount: number): void {
+    if (!amount || amount <= 0) return;
     this.userInfo.update((user) => {
       if (user) {
         return {
           ...user,
           saldo: user.saldo - amount,
+        };
+      }
+      return user;
+    });
+  }
+
+  refundFunds(amount: number): void {
+    if (!amount || amount <= 0) return;
+    this.userInfo.update((user) => {
+      if (user) {
+        return {
+          ...user,
+          saldo: user.saldo + amount,
         };
       }
       return user;

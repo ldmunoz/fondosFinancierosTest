@@ -17,17 +17,12 @@ export class Fund {
   readonly fundsSubscribed = this.fundService.fundsAvailable;
 
   onUnsubscribe(id: number) {
-    this.fundService.unsubscribeFromFund(id);
     const fund = this.fundService.getFundById(id);
-    this.refunds(fund?.monto_minimo ?? 0);
-  }
+    const refundAmount = fund.monto_suscrito ?? 0;
 
-  refunds(amount: number): void {
-    this.dashboardService.userInfo.update((user) => {
-      if (user) {
-        user.saldo += amount;
-      }
-      return user;
-    });
+    if (refundAmount > 0) {
+      this.fundService.unsubscribeFromFund(id);
+      this.dashboardService.refundFunds(refundAmount);
+    }
   }
 }

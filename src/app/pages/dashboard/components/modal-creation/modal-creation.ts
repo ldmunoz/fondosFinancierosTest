@@ -51,6 +51,8 @@ export class ModalCreationComponent implements OnInit {
     this.amountControl.valueChanges.subscribe((value) => {
       this.updateBalanceValidation(Number(value));
     });
+
+    this.investmentForm.get('amount')?.setValue(this.fund.monto_minimo);
   }
 
   // Form Configuration
@@ -96,6 +98,12 @@ export class ModalCreationComponent implements OnInit {
   confirmInvestment(): void {
     if (this.investmentForm.invalid) {
       this.investmentForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.fund.monto_minimo > this.amountControl.value) {
+      this.investmentForm.get('amount')?.setErrors({ min: true });
+      this.investmentForm.markAllAsDirty();
       return;
     }
 

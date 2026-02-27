@@ -93,9 +93,12 @@
             <p class="text-xs font-bold text-red-500">El monto es requerido</p>
           </div>
         }
-        @if (amountControl.touched && amountControl.value < 1000) {
+        @if (amountControl.touched && amountControl.value < fund.monto_minimo) {
           <div class="mt-2 bg-red-50 border border-red-100 rounded-xl p-2 flex gap-3">
-            <p class="text-xs font-bold text-red-500">El monto minimo a invertir es de 1000</p>
+            <p class="text-xs font-bold text-red-500">
+              El monto minimo a invertir es de
+              {{ fund.monto_minimo | currency: 'COP' : 'symbol' : '1.0-0' }}
+            </p>
           </div>
         }
         @if (isInsufficientBalance()) {

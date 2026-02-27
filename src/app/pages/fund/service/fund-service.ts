@@ -43,17 +43,24 @@ export class FundService {
   }
 
   unsubscribeFromFund(id: number) {
+    const fund = this.getFundById(id);
+    const refundAmount = fund.monto_suscrito ?? 0;
+
     this.fundsSignal.update((funds) =>
-      funds.map((f) => (f.id === id ? { ...f, estaSuscrito: false } : f)),
+      funds.map((f) =>
+        f.id === id ? { ...f, estaSuscrito: false, monto_suscrito: undefined } : f,
+      ),
     );
 
-    this.historyService.setHistory({
-      id: this.historyService.getHistories().length + 1,
-      date: new Date(),
-      type: 'Cancelación',
-      description: `Cancelación de suscripción al fondo ${this.getFundById(id).nombre}`,
-      amount: this.getFundById(id).monto_minimo,
-    });
+    if (refundAmount > 0) {
+      this.historyService.setHistory({
+        id: this.historyService.getHistories().length + 1,
+        date: new Date(),
+        type: 'Cancelación',
+        description: `Cancelación de suscripción al fondo ${fund.nombre}`,
+        amount: refundAmount,
+      });
+    }
   }
 
   getFundById(id: number): Fund {
